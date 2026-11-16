@@ -255,6 +255,8 @@ a { color: inherit; text-decoration-thickness: 1.5px; text-underline-offset: 3px
 .addon[aria-pressed="true"] .suit { color: var(--ink); }
 .addon[aria-pressed="true"] .state { background: var(--ink); color: var(--paper); }
 .addon[aria-pressed="true"] .state::before { content: "✓"; font-size: 16px; }
+.addon.wide { grid-column: 1 / -1; min-height: 0; padding-bottom: 22px; }
+.addon.wide .d { max-width: 78ch; }
 .addon-note { margin-top: 26px; color: var(--soft-ink); font-size: 16px; max-width: 70ch; }
 
 /* ---------- price ---------- */
@@ -375,7 +377,7 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; }
       <dl class="facts">
         <div><dt>מחיר הפרויקט</dt><dd class="num">8,000 ₪ + מע"מ</dd><dd class="deal num">במקום <s>10,000 ₪ + מע"מ</s></dd></div>
         <div><dt>דפים באתר</dt><dd class="num">9</dd></div>
-        <div><dt>תוספות לבחירה</dt><dd class="num">4</dd></div>
+        <div><dt>תוספות לבחירה</dt><dd class="num">5</dd></div>
       </dl>
       <p class="by">מגיש ההצעה: <strong>אנטוני בזדו</strong> · <a href="tel:0523813929"><span dir="ltr" class="num">052-381-3929</span></a></p>
     </div>
@@ -474,6 +476,9 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; }
           <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <strong>קידום אורגני לבינה מלאכותית (GEO)</strong>
             <p>התאמת התוכן והמבנה כך שמנועי בינה מלאכותית יוכלו להבין מי זה SUITS ולהציג אותו בתשובות שלהם.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>מדידת תנועה: Analytics, Pixel ו-GTM</strong>
+            <p>חיבור Google Analytics, Facebook Pixel עם CAPI, ו-Google Tag Manager. כך רואים מאיפה מגיעים הגולשים, מה הם עושים באתר, ועל מה כדאי לבסס את השיווק.</p></li>
         </ul>
       </div>
 
@@ -538,36 +543,42 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; }
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">אופציונלי</p>
-      <h2>ארבע תוספות לבחירה</h2>
+      <h2>חמש תוספות לבחירה</h2>
       <p>התוספות אינן כלולות במחיר הבסיס. סמנו את מה שמעניין אתכם, והבחירה תופיע בסיכום ההצעה למטה.</p>
     </div>
     <div class="addon-grid" id="addon-grid">
-      <button type="button" class="addon" id="addon-chat" data-name="צ'אט AI + מאגר ידע" aria-pressed="false">
+      <button type="button" class="addon" id="addon-chat" data-name="צ'אט AI + מאגר ידע" data-price="תמחור נפרד" aria-pressed="false">
         <span class="suit" aria-hidden="true">♠</span>
         <span class="t">צ'אט AI + מאגר ידע</span>
         <span class="d">צ'אט שעונה לגולשים על שאלות בכל שעה, ומאגר ידע שבו אתם מנהלים מה ה-AI יודע לענות.</span>
         <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
       </button>
-      <button type="button" class="addon" id="addon-tournaments" data-name="מערכת ניהול טורנירים" aria-pressed="false">
+      <button type="button" class="addon" id="addon-tournaments" data-name="מערכת ניהול טורנירים" data-price="תמחור נפרד" aria-pressed="false">
         <span class="suit" aria-hidden="true">♥</span>
         <span class="t">מערכת ניהול טורנירים</span>
         <span class="d">ניהול הטורנירים ישירות מהאתר, כולל העלאת קובצי אקסל.</span>
         <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
       </button>
-      <button type="button" class="addon" id="addon-club" data-name="הרשמה למועדון לקוחות" aria-pressed="false">
+      <button type="button" class="addon" id="addon-club" data-name="הרשמה למועדון לקוחות" data-price="תמחור נפרד" aria-pressed="false">
         <span class="suit" aria-hidden="true">♦</span>
         <span class="t">הרשמה למועדון לקוחות</span>
         <span class="d">מערכת הרשמה למועדון הלקוחות של SUITS, ישירות דרך האתר.</span>
         <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
       </button>
-      <button type="button" class="addon" id="addon-pay" data-name="סליקה חכמה" aria-pressed="false">
+      <button type="button" class="addon" id="addon-pay" data-name="סליקה חכמה" data-price="תמחור נפרד" aria-pressed="false">
         <span class="suit" aria-hidden="true">♣</span>
         <span class="t">סליקה חכמה</span>
         <span class="d">תשלום מאובטח באתר, בלי לעבור למערכת אחרת.</span>
         <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
       </button>
+      <button type="button" class="addon wide" id="addon-ads" data-name="שיווק בגוגל ובפייסבוק" data-price="לפי תקציב" aria-pressed="false">
+        <span class="suit" aria-hidden="true">★</span>
+        <span class="t">שיווק בגוגל ובפייסבוק</span>
+        <span class="d">ניהול קמפיינים בגוגל ובפייסבוק לפי התקציב שתקבעו. בינה מלאכותית לומדת את העסק, משפרת את הביצועים לאורך זמן, ומגישה דוחות על מה שעובד. הקמפיינים נשענים על המדידה שכבר מחוברת לאתר: Analytics, Pixel עם CAPI, ו-GTM.</span>
+        <span class="foot-row"><span class="price">לפי תקציב</span><span class="state">הוספה להצעה</span></span>
+      </button>
     </div>
-    <p class="addon-note">כל תוספת מתומחרת בנפרד לפי האפיון שלה, ואפשר להוסיף אותה גם אחרי שהאתר באוויר.</p>
+    <p class="addon-note">כל תוספת מתומחרת בנפרד לפי האפיון שלה, ואפשר להוסיף אותה גם אחרי שהאתר באוויר. בשיווק, תקציב המדיה נקבע על ידכם ומשולם ישירות לגוגל ולפייסבוק.</p>
   </div>
 </section>
 
@@ -699,12 +710,13 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 40px; }
 
     function summaryText() {
       var names = cards.filter(function (c) { return state.addons.indexOf(c.id) > -1; })
-                       .map(function (c) { return c.dataset.name; });
+                       .map(function (c) { return c.dataset.name + " (" + c.dataset.price + ")"; });
       var lines = [
         "אתר SUITS: " + ils(BASE) + " + מע\"מ במקום " + ils(FULL) + " + מע\"מ (" + ils(BASE * (1 + VAT)) + " כולל מע\"מ)",
         "תשלום: 4 תשלומים של 25%, " + ils(BASE / 4) + " + מע\"מ כל אחד",
+        "מדידה כלולה: Google Analytics, Facebook Pixel (CAPI), Google Tag Manager",
         names.length
-          ? "תוספות שסומנו (תמחור נפרד): " + names.join(", ")
+          ? "תוספות שסומנו: " + names.join(", ")
           : "תוספות: לא סומנו תוספות"
       ];
       return lines.join("\n");
