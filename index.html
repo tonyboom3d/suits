@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הצעת מחיר לאתר SUITS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a white brand page where the teal gradient is the poker felt.
+   The hero is a table seen from above: the photos are dealt as the five board cards.
+   Add-ons are four suit cards, payments are four chips. */
+:root {
+  color-scheme: light;
+  --ink: #0A0D0E;
+  --paper: #FFFFFF;
+  --teal-1: #20B2B8;
+  --teal-2: #208B9F;
+  --felt: linear-gradient(135deg, var(--teal-1), var(--teal-2));
+  --mist: #EDF6F7;
+  --line: #D5E3E5;
+  --soft-ink: #36454A;
+  --on-dark-soft: #B9C9CC;
+  --font: "Rubik", "Heebo", "Arial Hebrew", Arial, sans-serif;
+  --wrap: 1120px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 400;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3, p, dl, dd, ul, ol, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.12; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+.dark :focus-visible { outline-color: var(--paper); }
+.num { font-variant-numeric: tabular-nums; }
+
+.wrap { width: min(var(--wrap), 100% - 40px); margin-inline: auto; }
+section { padding-block: 88px; }
+
+.eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; font-weight: 500;
+}
+.eyebrow::before {
+  content: ""; width: 36px; height: 4px; border-radius: 4px; background: var(--felt); flex: none;
+}
+.sec-head { display: grid; gap: 14px; max-width: 720px; margin-bottom: 44px; }
+.sec-head h2 { font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; }
+.sec-head p { color: var(--soft-ink); max-width: 62ch; }
+.dark .sec-head p { color: var(--on-dark-soft); }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 40px 72px; overflow: hidden; }
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1.12fr; gap: 36px; align-items: center;
+}
+.hero-copy { display: grid; gap: 22px; justify-items: start; }
+.logo { width: 184px; height: auto; margin-bottom: 18px; }
+.hero h1 { font-size: clamp(40px, 5.1vw, 64px); font-weight: 900; letter-spacing: -0.01em; }
+.hero h1 > span { display: block; }
+.hero h1 .brand {
+  background: var(--felt); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lede { font-size: 19px; color: var(--soft-ink); max-width: 46ch; }
+.facts {
+  display: grid; grid-template-columns: repeat(3, auto); gap: 14px 32px; margin-top: 10px;
+  padding-top: 22px; border-top: 2px solid var(--ink);
+}
+.facts div { display: grid; gap: 2px; }
+.facts dt { font-size: 14px; color: var(--soft-ink); order: 2; }
+.facts dd { font-size: 24px; font-weight: 800; line-height: 1.2; }
+.facts dd.deal { order: 3; font-size: 14px; font-weight: 500; margin-top: 4px; }
+.facts dd.deal { color: var(--soft-ink); }
+.facts dd.deal s { text-decoration-thickness: 1.5px; }
+.by { font-size: 15.5px; color: var(--soft-ink); }
+.by strong { color: var(--ink); font-weight: 600; }
+a { color: inherit; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+
+/* top-down poker table: every size is in cqw so the whole scene scales with its column */
+.table-col { display: grid; gap: 12px; min-width: 0; }
+.scene { container-type: inline-size; direction: ltr; }
+.stage { position: relative; width: 100cqw; height: 84cqw; }
+.stage > *, .stage i { position: absolute; display: block; }
+.tbl {
+  left: 10cqw; top: 13cqw; width: 80cqw; height: 58cqw; border-radius: 29cqw;
+  background: var(--felt); border: 2.4cqw solid var(--ink);
+  box-shadow: 0 0 0 .5cqw #2C383C, 0 3cqw 5cqw rgba(10, 13, 14, .28);
+}
+.tbl::before {
+  content: ""; position: absolute; inset: 3cqw; border-radius: inherit;
+  border: .3cqw solid rgba(255, 255, 255, .55);
+}
+
+.player { width: 0; height: 0; z-index: 2; transform: rotate(var(--a)); --shirt: var(--ink); --edge: var(--ink); --hair: #5B6A6F; }
+.player.white { --shirt: #fff; --hair: var(--ink); }
+.player.teal { --shirt: var(--teal-2); --hair: var(--ink); }
+.player .body { left: 0; top: 0; animation: lean 3s ease-in-out infinite alternate; }
+.player .torso {
+  left: -6.5cqw; top: -3.6cqw; width: 13cqw; height: 7.2cqw; border-radius: 50%;
+  background: var(--shirt); border: .4cqw solid var(--edge);
+}
+.player .head {
+  left: -2.7cqw; top: -3.3cqw; width: 5.4cqw; height: 5.4cqw; border-radius: 50%;
+  background: var(--hair); border: .4cqw solid var(--edge);
+}
+.player.cap .head { background: #fff; }
+.player.cap .head::after {
+  content: ""; position: absolute; left: .4cqw; top: 3.6cqw; width: 3.8cqw; height: 2.3cqw;
+  border-radius: 0 0 2cqw 2cqw; background: #fff; border: .4cqw solid var(--edge); border-top: 0;
+}
+.player .arm {
+  top: -.6cqw; width: 2.8cqw; height: 7cqw; border-radius: 1.4cqw;
+  background: var(--shirt); border: .4cqw solid var(--edge); transform-origin: 50% 0;
+}
+.player .arm::after {
+  content: ""; position: absolute; left: -.2cqw; bottom: -.6cqw; width: 2.4cqw; height: 2.4cqw; border-radius: 50%;
+  background: #EEF3F3; border: .4cqw solid var(--edge);
+}
+.player .arm.l { left: -6.1cqw; rotate: -16deg; }
+.player .arm.r { left: 3.3cqw; rotate: 16deg; }
+.player .arm.tap { animation: tap 3.4s ease-in-out infinite; }
+@keyframes lean { to { transform: translateY(.8cqw); } }
+@keyframes tap { 0%, 80%, 88%, 96%, 100% { scale: 1 1; } 84%, 92% { scale: 1 1.14; } }
+
+.deck, .hole {
+  width: 3.6cqw; height: 5cqw; margin: -2.5cqw 0 0 -1.8cqw; border-radius: .6cqw; z-index: 3;
+  background: repeating-linear-gradient(45deg, var(--ink) 0 .45cqw, #26343A .45cqw .9cqw);
+  border: .4cqw solid #fff; box-shadow: 0 .3cqw .6cqw rgba(10, 13, 14, .35);
+}
+.deck { left: 50cqw; top: 20cqw; box-shadow: .35cqw .35cqw 0 #fff, .7cqw .7cqw 0 var(--ink), 1cqw 1cqw 0 #fff, 0 .8cqw 1.4cqw rgba(10, 13, 14, .4); }
+.chipx {
+  width: 3cqw; height: 3cqw; margin: -1.5cqw 0 0 -1.5cqw; border-radius: 50%; z-index: 3;
+  background: radial-gradient(circle, var(--ink) 0 40%, transparent 43%), repeating-conic-gradient(#fff 0 22.5deg, var(--ink) 22.5deg 45deg);
+  box-shadow: 0 .3cqw .5cqw rgba(10, 13, 14, .4);
+}
+.chipx.w { background: radial-gradient(circle, #fff 0 40%, transparent 43%), repeating-conic-gradient(var(--ink) 0 22.5deg, #fff 22.5deg 45deg); }
+.dbtn {
+  width: 3.6cqw; height: 3.6cqw; margin: -1.8cqw 0 0 -1.8cqw; border-radius: 50%; z-index: 3;
+  background: #fff; border: .4cqw solid var(--ink); display: grid; place-items: center;
+  font: 800 1.9cqw/1 var(--font); color: var(--ink); font-style: normal;
+}
+
+.pcard {
+  width: 17cqw; height: 25.5cqw; left: calc(var(--x) * 1cqw - 8.5cqw); top: calc(var(--y) * 1cqw - 12.75cqw);
+  z-index: var(--z); border-radius: 1.4cqw; transform: rotate(var(--t)); transform-style: preserve-3d;
+  box-shadow: 0 1.2cqw 2.2cqw rgba(10, 13, 14, .42); transition: transform .25s ease; cursor: zoom-in;
+}
+.pcard .face {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit;
+  border: .7cqw solid #fff; background: #fff; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.pcard .back {
+  transform: rotateY(180deg);
+  background: repeating-linear-gradient(45deg, var(--ink) 0 .9cqw, #26343A .9cqw 1.8cqw);
+}
+.pcard:hover, .pcard:focus-visible { transform: rotate(0deg) scale(1.6); z-index: 30; outline: none; }
+
+.scene-foot { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-size: 14px; font-weight: 500; }
+.redeal { background: none; border: 1.5px solid var(--ink); border-radius: 99px; padding: 5px 16px; font-size: 14px; font-weight: 600; }
+.redeal:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- opening ---------- */
+.opening { background: var(--mist); }
+.opening-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: start; }
+.opening .sec-head { margin-bottom: 0; }
+.opening .sec-head p + p { margin-top: 2px; }
+.roles { display: grid; gap: 0; border-top: 2px solid var(--ink); }
+.roles li {
+  display: grid; grid-template-columns: 44px 1fr; gap: 6px 16px; padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.roles .pip { font-size: 30px; line-height: 1; grid-row: span 2; color: var(--teal-2); }
+.roles li:nth-child(even) .pip { color: var(--ink); }
+.roles h3 { font-size: 20px; font-weight: 700; }
+.roles p { color: var(--soft-ink); grid-column: 2; }
+
+/* ---------- included ---------- */
+.groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 56px; }
+.group h3 {
+  font-size: 15px; font-weight: 600; padding-bottom: 12px; border-bottom: 2px solid var(--ink);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.group h3 small { font-size: 14px; font-weight: 400; color: var(--soft-ink); }
+.group li {
+  display: grid; grid-template-columns: 28px 1fr; gap: 2px 14px; padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.check {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--felt); grid-row: span 2;
+  display: grid; place-items: center; margin-top: 2px;
+}
+.check svg { width: 13px; height: 13px; }
+.group strong { font-size: 19px; font-weight: 700; line-height: 1.3; }
+.group p { color: var(--soft-ink); font-size: 16px; grid-column: 2; }
+.gift {
+  display: inline-block; font-size: 13px; font-weight: 600; padding: 1px 10px; border-radius: 99px;
+  background: var(--ink); color: var(--paper); margin-inline-start: 8px; vertical-align: 2px;
+}
+
+/* ---------- pages ---------- */
+.pages { background: var(--ink); color: var(--paper); position: relative; isolation: isolate; overflow: hidden; }
+.pages::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: .2;
+  background: url("img/table-view.jpg") center 64% / cover no-repeat;
+}
+.page-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.page-grid li {
+  border: 1px solid rgba(255, 255, 255, .22); border-radius: 14px; padding: 20px 22px 22px;
+  background: rgba(10, 13, 14, .62);
+  display: grid; gap: 6px; align-content: start;
+}
+.page-grid .n { font-size: 14px; font-weight: 500; color: var(--teal-1); }
+.page-grid h3 { font-size: 22px; font-weight: 700; }
+.page-grid p { font-size: 15.5px; color: var(--on-dark-soft); line-height: 1.55; }
+.page-grid li.legal { border-style: dashed; }
+
+/* ---------- add-ons ---------- */
+.addon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.addon {
+  position: relative; text-align: start; background: var(--paper);
+  border: 2px solid var(--ink); border-radius: 18px; padding: 60px 20px 20px;
+  display: grid; grid-template-rows: auto 1fr auto; gap: 10px; min-height: 330px;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.addon:hover { transform: translateY(-6px); box-shadow: 0 16px 28px rgba(10, 13, 14, .16); }
+.addon .suit {
+  position: absolute; top: 12px; inset-inline-start: 18px; font-size: 34px; line-height: 1;
+  color: var(--teal-2);
+}
+.addon:nth-child(even) .suit { color: var(--ink); }
+.addon .t { font-size: 21px; font-weight: 800; line-height: 1.2; }
+.addon .d { font-size: 15.5px; color: var(--soft-ink); line-height: 1.55; }
+.addon .foot-row { display: grid; gap: 4px; }
+.addon .price { font-size: 14px; font-weight: 500; }
+.addon .state {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 2px solid var(--ink); border-radius: 99px; padding: 9px 14px; font-weight: 600; font-size: 15.5px;
+  margin-top: 6px;
+}
+.addon .state::before { content: "+"; font-size: 20px; line-height: 1; font-weight: 500; }
+.addon[aria-pressed="true"] { background: var(--felt); transform: translateY(-6px); box-shadow: 0 16px 28px rgba(32, 139, 159, .35); }
+.addon[aria-pressed="true"] .d,
+.addon[aria-pressed="true"] .suit { color: var(--ink); }
+.addon[aria-pressed="true"] .state { background: var(--ink); color: var(--paper); }
+.addon[aria-pressed="true"] .state::before { content: "✓"; font-size: 16px; }
+.addon-note { margin-top: 26px; color: var(--soft-ink); font-size: 16px; max-width: 70ch; }
+
+/* ---------- price ---------- */
+.price-sec { background: var(--ink); color: var(--paper); }
+.price-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: start; }
+.total { display: grid; gap: 18px; justify-items: start; }
+.total .label { font-size: 15px; font-weight: 500; color: var(--on-dark-soft); }
+.total .amount { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; line-height: 1; }
+.total .amount b { font-size: clamp(42px, 5.2vw, 64px); font-weight: 800; letter-spacing: -0.01em; }
+.total .amount span { font-size: 22px; font-weight: 600; color: var(--teal-1); }
+.total .was { font-size: 20px; font-weight: 500; color: var(--on-dark-soft); margin-top: -8px; }
+.total .was s { text-decoration-thickness: 2px; }
+.total .alt { color: var(--on-dark-soft); font-size: 16px; }
+.seg {
+  display: inline-flex; border: 1.5px solid rgba(255, 255, 255, .4); border-radius: 99px; padding: 4px; gap: 4px;
+}
+.seg button {
+  background: none; border: 0; border-radius: 99px; padding: 7px 18px; font-size: 15px; font-weight: 500;
+  color: var(--paper);
+}
+.seg button[aria-checked="true"] { background: var(--felt); color: var(--ink); font-weight: 600; }
+
+.pay h3 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.pay > p { color: var(--on-dark-soft); margin-bottom: 30px; }
+.chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px 16px; }
+.chips li { display: grid; gap: 6px; justify-items: center; text-align: center; align-content: start; }
+.chip {
+  width: 104px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; margin-bottom: 8px;
+  background:
+    repeating-conic-gradient(from -7.5deg, #fff 0 15deg, transparent 15deg 45deg),
+    var(--felt);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .5);
+}
+.chip span {
+  width: 72%; aspect-ratio: 1; border-radius: 50%; background: var(--ink);
+  border: 2px solid rgba(255, 255, 255, .7);
+  display: grid; place-items: center; font-size: 22px; font-weight: 800;
+}
+.chips .step { font-size: 14px; color: var(--teal-1); font-weight: 500; }
+.chips .when { font-weight: 600; line-height: 1.35; }
+.chips .sum { font-size: 15px; color: var(--on-dark-soft); }
+
+.summary {
+  margin-top: 64px; border: 1px solid rgba(255, 255, 255, .28); border-radius: 18px; padding: 28px 30px;
+  display: grid; grid-template-columns: 1fr auto; gap: 20px 40px; align-items: center;
+}
+.summary h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.summary pre {
+  margin: 0; font: inherit; white-space: pre-wrap; color: var(--on-dark-soft); font-size: 16px; line-height: 1.7;
+}
+.copy {
+  background: var(--felt); color: var(--ink); border: 0; border-radius: 99px; padding: 14px 26px;
+  font-weight: 700; font-size: 16px; white-space: nowrap;
+}
+.copy:hover { filter: brightness(1.08); }
+.copy-status { grid-column: 1 / -1; min-height: 1.4em; font-size: 15px; color: var(--teal-1); margin-top: -8px; }
+
+/* ---------- next steps ---------- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 2px solid var(--ink); }
+.steps li { padding: 24px 0 0; padding-inline-end: 28px; display: grid; gap: 8px; align-content: start; }
+.steps .n { font-size: 44px; font-weight: 900; line-height: 1; background: var(--felt); -webkit-background-clip: text; background-clip: text; color: transparent; justify-self: start; }
+.steps h3 { font-size: 19px; font-weight: 700; }
+.steps p { color: var(--soft-ink); font-size: 16px; }
+
+/* ---------- notes ---------- */
+.notes { background: var(--mist); }
+.note-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 56px; border-top: 2px solid var(--ink); }
+.note-grid li { padding: 24px 0; border-bottom: 1px solid var(--line); display: grid; gap: 8px; align-content: start; }
+.note-grid h3 { font-size: 19px; font-weight: 700; }
+.note-grid p { color: var(--soft-ink); font-size: 16px; max-width: 58ch; }
+.steps-time { color: var(--soft-ink); max-width: 62ch; }
+
+footer { border-top: 1px solid var(--line); padding-block: 28px 40px; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 16px 32px; flex-wrap: wrap; font-size: 14.5px; color: var(--soft-ink); }
+.foot img { width: 96px; height: auto; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  section { padding-block: 60px; }
+  .hero { padding-block: 28px 56px; }
+  .hero-grid, .opening-grid, .price-grid { grid-template-columns: 1fr; gap: 40px; }
+  .groups { grid-template-columns: 1fr; gap: 40px; }
+  .page-grid { grid-template-columns: repeat(2, 1fr); }
+  .addon-grid { grid-template-columns: repeat(2, 1fr); }
+  .addon { min-height: 0; }
+  .steps { grid-template-columns: repeat(2, 1fr); row-gap: 12px; }
+  .summary { grid-template-columns: 1fr; }
+  .copy { justify-self: start; }
+  .note-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16.5px; }
+  .wrap { width: calc(100% - 32px); }
+  .facts { grid-template-columns: repeat(2, auto); justify-content: start; }
+  .facts div:first-child { grid-column: 1 / -1; }
+  .page-grid, .addon-grid, .steps { grid-template-columns: 1fr; }
+  .chips { grid-template-columns: repeat(2, 1fr); }
+  .summary { padding: 22px 20px; }
+  .steps li { padding-inline-end: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .player .body, .player .arm.tap { animation: none; }
+  .pcard { transition: none; }
+  .addon { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <img class="logo" src="img/logo.png" alt="SUITS" width="370" height="107">
+      <p class="eyebrow">הצעת מחיר להקמת אתר · <span class="num">16.11.2026</span></p>
+      <h1><span>הבית הדיגיטלי</span><span>של <span class="brand">SUITS</span></span></h1>
+      <p class="lede">אתר אחד שמרכז את כל מה שקורה בבית הספר ובמרכז הפוקר: לוח אירועים, תוכן לימודי, פודקאסט, גלריה וניהול לקוחות. מעוצב בשפה של SUITS ובנוי לשנים קדימה.</p>
+      <dl class="facts">
+        <div><dt>מחיר הפרויקט</dt><dd class="num">8,000 ₪ + מע"מ</dd><dd class="deal num">במקום <s>10,000 ₪ + מע"מ</s></dd></div>
+        <div><dt>דפים באתר</dt><dd class="num">9</dd></div>
+        <div><dt>תוספות לבחירה</dt><dd class="num">4</dd></div>
+      </dl>
+      <p class="by">מגיש ההצעה: <strong>אנטוני בזדו</strong> · <a href="tel:0523813929"><span dir="ltr" class="num">052-381-3929</span></a></p>
+    </div>
+
+    <div class="table-col">
+      <div class="scene">
+        <div class="stage" id="stage">
+          <i class="tbl" aria-hidden="true"></i>
+          <i class="deck" aria-hidden="true"></i>
+          <figure class="pcard" tabindex="0" style="--x:23;--y:42.8;--t:-4deg;--z:5"><i class="face back" aria-hidden="true"></i><img class="face" src="img/table-view.jpg" alt="שולחן פוקר של SUITS עם חפיסה פרושה ונוף עירוני בחלון" width="415" height="739"></figure>
+          <figure class="pcard" tabindex="0" style="--x:36.5;--y:41.4;--t:2.5deg;--z:6"><i class="face back" aria-hidden="true"></i><img class="face" src="img/champion-1.jpg" alt="זוכה טורניר מחזיק קלפים ליד גביע וערימת צ'יפים" width="335" height="597"></figure>
+          <figure class="pcard" tabindex="0" style="--x:50;--y:42.3;--t:-1.5deg;--z:7"><i class="face back" aria-hidden="true"></i><img class="face" src="img/table-deal.jpg" alt="שחקנים סביב שולחן SUITS במהלך משחק" width="335" height="597"></figure>
+          <figure class="pcard" tabindex="0" style="--x:63.5;--y:41.2;--t:3deg;--z:8"><i class="face back" aria-hidden="true"></i><img class="face" src="img/champion-2.jpg" alt="זוכה טורניר עם גביע, לצד שני חברי צוות" width="335" height="597"></figure>
+          <figure class="pcard" tabindex="0" style="--x:77;--y:42.6;--t:-3.5deg;--z:9"><i class="face back" aria-hidden="true"></i><img class="face" src="img/table-player.jpg" alt="שחקן מניח צ'יפים על שולחן SUITS" width="335" height="597"></figure>
+        </div>
+      </div>
+      <div class="scene-foot">
+        <p>רגעים מהשולחנות של SUITS</p>
+        <button type="button" class="redeal" id="redeal">חלוקה מחדש</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="opening" id="opening">
+  <div class="wrap opening-grid">
+    <div class="sec-head">
+      <p class="eyebrow">פתיח</p>
+      <h2>מה האתר יעשה עבור SUITS</h2>
+      <p>מי שמחפש היום בית ספר לפוקר, טורניר קרוב או מקום ללמוד את המשחק לא מוצא את SUITS ברשת. האתר ישנה את זה.</p>
+      <p>הוא יהיה הכתובת הרשמית של המועדון: המקום שבו שחקנים חדשים מכירים אתכם, ושחקנים קבועים מתעדכנים במה שקורה השבוע.</p>
+    </div>
+    <ul class="roles">
+      <li>
+        <span class="pip" aria-hidden="true">♠</span>
+        <h3>לוח אירועים אחד ומעודכן</h3>
+        <p>טורנירים, שיעורים ואירועים מיוחדים מסודרים לפי תאריך, כך שכל שחקן יודע מה מתוכנן ומתי.</p>
+      </li>
+      <li>
+        <span class="pip" aria-hidden="true">♥</span>
+        <h3>שחקנים חדשים מוצאים אתכם</h3>
+        <p>האתר נבנה מהיסוד לחיפוש בגוגל, ומותאם גם למנועי בינה מלאכותית, כדי שמי ששואל את ChatGPT או Gemini יוכל להגיע אליכם.</p>
+      </li>
+      <li>
+        <span class="pip" aria-hidden="true">♦</span>
+        <h3>מעמד של בית ספר מקצועי</h3>
+        <p>בלוג, פודקאסט וגלריה מציגים את הידע, האווירה והזוכים של המועדון, ובונים אמון עוד לפני הביקור הראשון.</p>
+      </li>
+      <li>
+        <span class="pip" aria-hidden="true">♣</span>
+        <h3>כל פנייה נשמרת ומטופלת</h3>
+        <p>מי שמשאיר פרטים נכנס ישר למערכת ה-CRM. אתם רואים מי פנה, ועוקבים אחרי התנועה באתר במקום אחד.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="included">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">כלול במחיר</p>
+      <h2>מה ההצעה כוללת</h2>
+      <p>כל מה שברשימה הזו כלול במחיר הפרויקט, <span class="num">8,000 ₪ + מע"מ</span> במקום <s class="num">10,000 ₪ + מע"מ</s>.</p>
+    </div>
+
+    <div class="groups">
+      <div class="group">
+        <h3>עיצוב ובנייה</h3>
+        <ul>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>אפיון ועיצוב בשפה של SUITS</strong>
+            <p>אפיון מלא של האתר ועיצוב בהתאם לשפה העיצובית של החברה: הלוגו, הצבעים והאווירה של המועדון.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>אתר מודרני לשנים קדימה</strong>
+            <p>אתר מהיר, עדכני וקל להרחבה, שישרת את החברה שנים קדימה.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>עיצוב מובייל (אתר רספונסיבי)</strong>
+            <p>האתר מותאם לכל מסך: טלפון, טאבלט ומחשב.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>גלריית תמונות</strong>
+            <p>תמונות מהטורנירים, מהשולחנות ומהזוכים, בגלריה מסודרת.</p></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <h3>קידום ונראות</h3>
+        <ul>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>מבנה SEO</strong>
+            <p>מבנה דפים, כותרות ותגיות שבנויים נכון למנועי חיפוש מהיום הראשון.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>קידום אורגני בסיסי (SEO)</strong>
+            <p>התאמה בסיסית של דפי האתר לביטויים שהלקוחות שלכם מחפשים בגוגל.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>קידום אורגני לבינה מלאכותית (GEO)</strong>
+            <p>התאמת התוכן והמבנה כך שמנועי בינה מלאכותית יוכלו להבין מי זה SUITS ולהציג אותו בתשובות שלהם.</p></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <h3>אמון ותשתית</h3>
+        <ul>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>אבטחת מידע</strong>
+            <p>חיבור מאובטח והגנה על הטפסים ועל פרטי הגולשים.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>הנגשת אתר</strong>
+            <p>התאמת האתר לגולשים עם מוגבלות, והקמת דף להצהרת הנגישות.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>דומיין לשנה<span class="gift">מתנה</span></strong>
+            <p>כתובת האתר על חשבוננו בשנה הראשונה.</p></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <h3>ניהול ותוכן</h3>
+        <ul>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>מערכת CRM מלאה</strong>
+            <p>ניהול לקוחות ופניות במקום אחד, וצפייה באנליטיקות האתר.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>9 דפי אתר</strong>
+            <p>בית, לוח אירועים, בלוג, פודקאסט, שאלות ותשובות, יצירת קשר ושלושה דפים משפטיים. הפירוט בהמשך.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>כפתור וואטסאפ<span class="gift">בחינם</span></strong>
+            <p>כפתור שמאפשר לגולשים לפנות אליכם בוואטסאפ בלחיצה אחת, מכל דף באתר.</p></li>
+          <li><span class="check" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5 5.5 11 12 3.5" stroke="#0A0D0E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <strong>אוטומציות בסיסיות<span class="gift">בחינם</span></strong>
+            <p>פעולות שקורות מעצמן, למשל שליחת מייל אוטומטי לאחר פנייה באתר.</p></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pages dark" id="pages">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">מבנה האתר</p>
+      <h2>9 הדפים שנבנה</h2>
+      <p>שישה דפי תוכן ושלושה דפים משפטיים שכל אתר עסקי צריך.</p>
+    </div>
+    <ol class="page-grid">
+      <li><span class="n num">01</span><h3>בית</h3><p>הפנים של SUITS: מי אתם, מה קורה השבוע והדרך הקצרה ליצירת קשר.</p></li>
+      <li><span class="n num">02</span><h3>לוח אירועים</h3><p>טורנירים, שיעורים ואירועים לפי תאריך.</p></li>
+      <li><span class="n num">03</span><h3>בלוג</h3><p>מאמרים, טיפים ועדכונים מבית הספר.</p></li>
+      <li><span class="n num">04</span><h3>פודקאסט</h3><p>כל הפרקים במקום אחד, נגישים לכל גולש.</p></li>
+      <li><span class="n num">05</span><h3>שאלות ותשובות</h3><p>תשובות ברורות לשאלות שחוזרות על עצמן.</p></li>
+      <li><span class="n num">06</span><h3>יצירת קשר</h3><p>טופס פנייה שנכנס ישר למערכת ה-CRM.</p></li>
+      <li class="legal"><span class="n num">07</span><h3>תנאי שימוש</h3><p>דף משפטי. התוכן באחריות הלקוח.</p></li>
+      <li class="legal"><span class="n num">08</span><h3>מדיניות פרטיות</h3><p>דף משפטי. התוכן באחריות הלקוח.</p></li>
+      <li class="legal"><span class="n num">09</span><h3>הצהרת נגישות</h3><p>דף משפטי. התוכן באחריות הלקוח.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="addons">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">אופציונלי</p>
+      <h2>ארבע תוספות לבחירה</h2>
+      <p>התוספות אינן כלולות במחיר הבסיס. סמנו את מה שמעניין אתכם, והבחירה תופיע בסיכום ההצעה למטה.</p>
+    </div>
+    <div class="addon-grid" id="addon-grid">
+      <button type="button" class="addon" id="addon-chat" data-name="צ'אט AI + מאגר ידע" aria-pressed="false">
+        <span class="suit" aria-hidden="true">♠</span>
+        <span class="t">צ'אט AI + מאגר ידע</span>
+        <span class="d">צ'אט שעונה לגולשים על שאלות בכל שעה, ומאגר ידע שבו אתם מנהלים מה ה-AI יודע לענות.</span>
+        <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
+      </button>
+      <button type="button" class="addon" id="addon-tournaments" data-name="מערכת ניהול טורנירים" aria-pressed="false">
+        <span class="suit" aria-hidden="true">♥</span>
+        <span class="t">מערכת ניהול טורנירים</span>
+        <span class="d">ניהול הטורנירים ישירות מהאתר, כולל העלאת קובצי אקסל.</span>
+        <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
+      </button>
+      <button type="button" class="addon" id="addon-club" data-name="הרשמה למועדון לקוחות" aria-pressed="false">
+        <span class="suit" aria-hidden="true">♦</span>
+        <span class="t">הרשמה למועדון לקוחות</span>
+        <span class="d">מערכת הרשמה למועדון הלקוחות של SUITS, ישירות דרך האתר.</span>
+        <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
+      </button>
+      <button type="button" class="addon" id="addon-pay" data-name="סליקה חכמה" aria-pressed="false">
+        <span class="suit" aria-hidden="true">♣</span>
+        <span class="t">סליקה חכמה</span>
+        <span class="d">תשלום מאובטח באתר, בלי לעבור למערכת אחרת.</span>
+        <span class="foot-row"><span class="price">תמחור נפרד</span><span class="state">הוספה להצעה</span></span>
+      </button>
+    </div>
+    <p class="addon-note">כל תוספת מתומחרת בנפרד לפי האפיון שלה, ואפשר להוסיף אותה גם אחרי שהאתר באוויר.</p>
+  </div>
+</section>
+
+<section class="price-sec dark" id="price">
+  <div class="wrap">
+    <div class="price-grid">
+      <div class="total">
+        <p class="eyebrow">ההשקעה</p>
+        <p class="label" id="total-label">מחיר הפרויקט, לפני מע"מ</p>
+        <p class="amount"><b class="num" id="total-amount">8,000 ₪</b><span id="total-suffix">+ מע"מ</span></p>
+        <p class="was num">במקום <s id="full-amount">10,000 ₪ + מע"מ</s></p>
+        <p class="alt num" id="total-alt">9,440 ₪ כולל מע"מ (18%)</p>
+        <div class="seg" role="radiogroup" aria-label="הצגת מחירים">
+          <button type="button" role="radio" id="vat-off" aria-checked="true">לפני מע"מ</button>
+          <button type="button" role="radio" id="vat-on" aria-checked="false">כולל מע"מ</button>
+        </div>
+      </div>
+
+      <div class="pay">
+        <h3>תנאי תשלום: ארבעה תשלומים שווים</h3>
+        <p>כל תשלום הוא 25% ממחיר הפרויקט, ומשולם עם השלמת שלב.</p>
+        <ol class="chips">
+          <li><div class="chip" aria-hidden="true"><span class="num">25%</span></div><span class="step">תשלום 1</span><span class="when">בחתימה על ההצעה</span><span class="sum num" data-share="0.25"></span></li>
+          <li><div class="chip" aria-hidden="true"><span class="num">25%</span></div><span class="step">תשלום 2</span><span class="when">באישור העיצוב</span><span class="sum num" data-share="0.25"></span></li>
+          <li><div class="chip" aria-hidden="true"><span class="num">25%</span></div><span class="step">תשלום 3</span><span class="when">בסיום הפיתוח</span><span class="sum num" data-share="0.25"></span></li>
+          <li><div class="chip" aria-hidden="true"><span class="num">25%</span></div><span class="step">תשלום 4</span><span class="when">בעלייה לאוויר</span><span class="sum num" data-share="0.25"></span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div>
+        <h3>סיכום ההצעה</h3>
+        <pre id="summary-text"></pre>
+      </div>
+      <button type="button" class="copy" id="copy-btn">העתקת הסיכום</button>
+      <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">מה הלאה</p>
+      <h2>מהאישור ועד לעלייה לאוויר</h2>
+      <p class="steps-time">התהליך כולו נמשך כחודש עד חודש וחצי.</p>
+    </div>
+    <ol class="steps">
+      <li><span class="n num">1</span><h3>אישור ההצעה</h3><p>מאשרים את ההצעה מול אנטוני ובוחרים אילו תוספות לצרף.</p></li>
+      <li><span class="n num">2</span><h3>אפיון</h3><p>פגישה שבה מגדירים יחד את התוכן, המבנה והצרכים של המועדון.</p></li>
+      <li><span class="n num">3</span><h3>עיצוב</h3><p>עיצוב האתר בשפה של SUITS, לאישורכם.</p></li>
+      <li><span class="n num">4</span><h3>פיתוח ועלייה לאוויר</h3><p>בנייה, בדיקות בכל המסכים והשקת האתר.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="notes" id="notes">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">שונות</p>
+      <h2>כמה דברים שחשוב לדעת</h2>
+      <p>ריכזנו כאן את ההערות והתנאים של ההצעה, כדי שהכול יהיה ברור מראש ונוכל להתרכז בעבודה עצמה.</p>
+    </div>
+    <ul class="note-grid">
+      <li>
+        <h3>לוח זמנים</h3>
+        <p>העבודה על האתר נמשכת כחודש עד חודש וחצי. לוח הזמנים תלוי גם בהחלטות שלכם לאורך הדרך ובקבלת החומרים הדרושים לבניית האתר.</p>
+      </li>
+      <li>
+        <h3>אחסון ופלטפורמה</h3>
+        <p>האתר ייבנה על פלטפורמת Wix, שתשמש אך ורק כמערכת לניהול התוכן והלקוחות, ויאוחסן על תשתיות הענן של Amazon (AWS) ו-Google. עלות האחסון משולמת בנפרד על ידי הלקוח, ועומדת על כ-<span class="num">52 עד 89 ₪</span> לחודש, בהתאם לדרישות האתר.</p>
+      </li>
+      <li>
+        <h3>תכנים</h3>
+        <p>כתיבת תוכן ייעודית אינה כלולה בהצעה. התכנים לאתר ייכתבו בעזרת בינה מלאכותית, ותוכלו לערוך אותם או לספק תכנים משלכם מראש. בנוסף תקבלו דגשים לתוכן, כולל ניתוח מילות מפתח לקידום האתר.</p>
+      </li>
+      <li>
+        <h3>תחזוקה</h3>
+        <p>כאתר תדמית, האתר אינו מצריך תחזוקה שוטפת. אם תרצו בהמשך תוספות שכוללות פיתוח טכני, תידרש תחזוקה שוטפת לשמירה על המערכת: אבטחה, תיקונים ושיפורים. תחזוקה כזו מתומחרת בנפרד, במתכונת של חבילת שעות.</p>
+      </li>
+      <li>
+        <h3>אחריות</h3>
+        <p>האתר מגיע עם אחריות של 3 חודשים, מרגע ההודעה על מסירת האתר. האחריות חלה על מה שבוצע במסגרת פיתוח האתר בלבד, ואינה כוללת שינויים שנעשו על ידי צד שלישי.</p>
+      </li>
+      <li>
+        <h3>דפים משפטיים</h3>
+        <p>אנחנו מקימים ומעצבים את הדפים המשפטיים: תנאי שימוש, מדיניות פרטיות, הצהרת נגישות וכדומה. התוכן שלהם באחריות הלקוח בלבד.</p>
+      </li>
+      <li>
+        <h3>מחירים ותוספות</h3>
+        <p>המחירים בהצעה בשקלים ואינם כוללים מע"מ. התוספות לבחירה אינן כלולות במחיר הפרויקט, וכל אחת מהן מתומחרת בנפרד.</p>
+      </li>
+      <li>
+        <h3>שאלות?</h3>
+        <p>אנטוני זמין לכל שאלה או הבהרה בטלפון <a href="tel:0523813929"><span dir="ltr" class="num">052-381-3929</span></a>.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <img src="img/logo.png" alt="SUITS" width="370" height="107">
+    <p>הצעת מחיר להקמת אתר עבור SUITS · נובמבר 2026 · מוגשת על ידי אנטוני בזדו, <a href="tel:0523813929"><span dir="ltr" class="num">052-381-3929</span></a> · מע"מ בשיעור 18%.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var BASE = 8000;      // project price before VAT, in ILS
+  var FULL = 10000;     // full price before the discount, before VAT
+  var VAT = 0.18;       // Israeli VAT rate
+
+  function ils(n) { return Math.round(n).toLocaleString("en-US") + " ₪"; }
+
+  function start(saved) {
+    var state = {
+      vat: !!(saved && saved.vat),
+      addons: (saved && Array.isArray(saved.addons)) ? saved.addons.slice() : []
+    };
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".addon"));
+    var vatOn = document.getElementById("vat-on");
+    var vatOff = document.getElementById("vat-off");
+    var status = document.getElementById("copy-status");
+
+    function summaryText() {
+      var names = cards.filter(function (c) { return state.addons.indexOf(c.id) > -1; })
+                       .map(function (c) { return c.dataset.name; });
+      var lines = [
+        "אתר SUITS: " + ils(BASE) + " + מע\"מ במקום " + ils(FULL) + " + מע\"מ (" + ils(BASE * (1 + VAT)) + " כולל מע\"מ)",
+        "תשלום: 4 תשלומים של 25%, " + ils(BASE / 4) + " + מע\"מ כל אחד",
+        names.length
+          ? "תוספות שסומנו (תמחור נפרד): " + names.join(", ")
+          : "תוספות: לא סומנו תוספות"
+      ];
+      return lines.join("\n");
+    }
+
+    function render() {
+      var mult = state.vat ? 1 + VAT : 1;
+      document.getElementById("total-amount").textContent = ils(BASE * mult);
+      document.getElementById("full-amount").textContent =
+        ils(FULL * mult) + (state.vat ? " כולל מע\"מ" : " + מע\"מ");
+      document.getElementById("total-label").textContent =
+        state.vat ? "מחיר הפרויקט, כולל מע\"מ (18%)" : "מחיר הפרויקט, לפני מע\"מ";
+      document.getElementById("total-suffix").textContent = state.vat ? "כולל מע\"מ" : "+ מע\"מ";
+      document.getElementById("total-alt").textContent =
+        state.vat ? ils(BASE) + " לפני מע\"מ" : ils(BASE * (1 + VAT)) + " כולל מע\"מ (18%)";
+      vatOn.setAttribute("aria-checked", String(state.vat));
+      vatOff.setAttribute("aria-checked", String(!state.vat));
+
+      Array.prototype.forEach.call(document.querySelectorAll(".sum"), function (el) {
+        var part = BASE * parseFloat(el.dataset.share) * mult;
+        el.textContent = ils(part) + (state.vat ? " כולל מע\"מ" : " + מע\"מ");
+      });
+
+      cards.forEach(function (c) {
+        var on = state.addons.indexOf(c.id) > -1;
+        c.setAttribute("aria-pressed", String(on));
+        c.querySelector(".state").textContent = on ? "נבחר" : "הוספה להצעה";
+      });
+
+      document.getElementById("summary-text").textContent = summaryText();
+    }
+
+    cards.forEach(function (c) {
+      c.addEventListener("click", function () {
+        var i = state.addons.indexOf(c.id);
+        if (i > -1) state.addons.splice(i, 1); else state.addons.push(c.id);
+        status.textContent = "";
+        render();
+      });
+    });
+    vatOn.addEventListener("click", function () { state.vat = true; render(); });
+    vatOff.addEventListener("click", function () { state.vat = false; render(); });
+
+    document.getElementById("copy-btn").addEventListener("click", function () {
+      var text = summaryText();
+      var fallback = function () {
+        var range = document.createRange();
+        range.selectNodeContents(document.getElementById("summary-text"));
+        var sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(range);
+        status.textContent = "ההעתקה האוטומטית לא זמינה כאן. הסיכום מסומן, אפשר להעתיק אותו ידנית.";
+      };
+      try {
+        navigator.clipboard.writeText(text).then(function () {
+          status.textContent = "הסיכום הועתק. אפשר להדביק אותו בהודעה.";
+        }, fallback);
+      } catch (e) { fallback(); }
+    });
+
+    try {
+      if (window.claude && window.claude.hot && window.claude.hot.snapshot) {
+        window.claude.hot.snapshot(function () { return { vat: state.vat, addons: state.addons }; });
+      }
+    } catch (e) {}
+
+    render();
+  }
+
+
+  /* ---------- top-down table: players, hole cards, chips and the deal ---------- */
+  function buildTable() {
+    var stage = document.getElementById("stage");
+    if (!stage || stage.dataset.built) return;
+    stage.dataset.built = "1";
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var canAnimate = !still && typeof stage.animate === "function";
+    var DECK = { x: 50, y: 20 }, POT = { x: 50, y: 60.5 };
+    var seats = [
+      { x: 50,   y: 8.5,  a: 0,    look: "white", dealer: true },
+      { x: 80.2, y: 14.6, a: 35,   look: "ink" },
+      { x: 80.2, y: 69.4, a: 145,  look: "teal", tap: true },
+      { x: 62,   y: 75.5, a: 180,  look: "ink cap" },
+      { x: 38,   y: 75.5, a: 180,  look: "white", button: true },
+      { x: 19.8, y: 69.4, a: -145, look: "ink", tap: true },
+      { x: 19.8, y: 14.6, a: -35,  look: "teal cap" }
+    ];
+
+    function put(cls, x, y) {
+      var e = document.createElement("i");
+      e.className = cls; e.setAttribute("aria-hidden", "true");
+      e.style.left = x + "cqw"; e.style.top = y + "cqw";
+      stage.appendChild(e);
+      return e;
+    }
+
+    var holes = [], stacks = [], players = 0;
+    seats.forEach(function (s, i) {
+      var r = s.a * Math.PI / 180;
+      var fx = -Math.sin(r), fy = Math.cos(r);   // towards the table
+      var px = Math.cos(r), py = Math.sin(r);    // along the shoulders
+      var p = put("player " + s.look, s.x, s.y);
+      p.style.setProperty("--a", s.a + "deg");
+      p.innerHTML = '<i class="body" style="animation-duration:' + (2.4 + i * 0.37).toFixed(2) + 's;animation-delay:-' + (i * 0.8).toFixed(1) + 's">' +
+        '<i class="arm l"></i><i class="arm r' + (s.tap ? " tap" : "") + '"></i><i class="torso"></i><i class="head"></i></i>';
+      if (s.dealer) return;
+      [-1, 1].forEach(function (side, k) {
+        var x = s.x + fx * 10.5 + px * side * 1.7, y = s.y + fy * 10.5 + py * side * 1.7, rot = s.a + side * 8;
+        var h = put("hole", x, y);
+        h.style.transform = "rotate(" + rot + "deg)";
+        holes.push({ el: h, x: x, y: y, rot: rot, seat: players, round: k });
+      });
+      var sx = s.x + fx * 9.5 + px * 7, sy = s.y + fy * 9.5 + py * 7;
+      put("chipx", sx, sy); put("chipx w", sx + 0.5, sy - 0.6);
+      stacks.push({ x: sx, y: sy });
+      if (s.button) put("dbtn", s.x + fx * 9.5 - px * 6, s.y + fy * 9.5 - py * 6).textContent = "D";
+      players++;
+    });
+    put("chipx", POT.x - 1.4, POT.y + 0.3); put("chipx w", POT.x + 1.3, POT.y - 0.2); put("chipx", POT.x, POT.y - 1.2);
+
+    var board = Array.prototype.map.call(stage.querySelectorAll(".pcard"), function (el) {
+      var cs = getComputedStyle(el);
+      return { el: el, x: parseFloat(cs.getPropertyValue("--x")), y: parseFloat(cs.getPropertyValue("--y")), t: cs.getPropertyValue("--t").trim() };
+    });
+
+    var running = [];
+    function deal() {
+      if (!canAnimate) return;
+      running.forEach(function (a) { a.cancel(); });
+      running = [];
+      var ease = "cubic-bezier(.2,.8,.2,1)", t0 = 350;
+      holes.forEach(function (h) {
+        running.push(h.el.animate([
+          { transform: "translate(" + (DECK.x - h.x) + "cqw," + (DECK.y - h.y) + "cqw) rotate(0deg)" },
+          { transform: "translate(0cqw,0cqw) rotate(" + h.rot + "deg)" }
+        ], { duration: 420, delay: t0 + (h.round * players + h.seat) * 80, easing: ease, fill: "backwards" }));
+      });
+      var t1 = t0 + holes.length * 80 + 450;
+      [0, 170, 340, 1150, 1950].forEach(function (d, i) {
+        var c = board[i];
+        if (!c) return;
+        running.push(c.el.animate([
+          { transform: "translate(" + (DECK.x - c.x) + "cqw," + (DECK.y - c.y) + "cqw) rotate(-160deg) rotateY(180deg) scale(.22)", easing: ease },
+          { transform: "translate(0cqw,0cqw) rotate(" + c.t + ") rotateY(180deg) scale(1)", offset: .6, easing: "ease-in-out" },
+          { transform: "translate(0cqw,0cqw) rotate(" + c.t + ") rotateY(0deg) scale(1)" }
+        ], { duration: 980, delay: t1 + d, fill: "backwards" }));
+      });
+    }
+
+    if (canAnimate) {
+      /* players keep betting: a chip slides from a stack into the pot every few seconds */
+      [0, 2, 4].forEach(function (si, n) {
+        var from = stacks[si], chip = put(n % 2 ? "chipx w" : "chipx", POT.x + (n - 1) * 1.6, POT.y + 1.6);
+        var dx = from.x - (POT.x + (n - 1) * 1.6), dy = from.y - (POT.y + 1.6);
+        var away = "translate(" + dx + "cqw," + dy + "cqw)", home = "translate(0cqw,0cqw)";
+        chip.animate([
+          { transform: away, opacity: 0 },
+          { transform: away, opacity: 1, offset: .04, easing: "cubic-bezier(.3,.7,.3,1)" },
+          { transform: home, opacity: 1, offset: .13 },
+          { transform: home, opacity: 1, offset: .93 },
+          { transform: home, opacity: 0 }
+        ], { duration: 9000, delay: 5200 + n * 2400, iterations: Infinity, fill: "backwards" });
+      });
+    }
+
+    var again = document.getElementById("redeal");
+    if (canAnimate) again.addEventListener("click", deal); else again.hidden = true;
+    deal();
+  }
+  try { buildTable(); } catch (e) {}
+
+  var hot = window.claude && window.claude.hot;
+  if (hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
+})();
+</script>
+</body>
+</html>
